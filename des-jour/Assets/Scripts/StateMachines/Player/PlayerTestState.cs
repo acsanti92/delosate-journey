@@ -5,31 +5,33 @@ using UnityEngine;
 public class PlayerTestState : PlayerBaseState
 {
     // Timer for the state
-    private float timer = 5f;
+    private float timer;
     // Constructor for the PlayerTestState class
     public PlayerTestState(PlayerStateMachine stateMachine) : base(stateMachine) { }
 
     public override void Enter()
     {
-        Debug.Log("Enter");
+        // If the jump button is pressed
+        stateMachine.InputReader.JumpEvent += OnJump;
     }
 
     public override void Tick(float deltaTime)
     {
         // Decrement the timer
-        timer -= deltaTime;
-        Debug.Log(timer);
+        timer += deltaTime;
 
-        // If the timer is less than or equal to 0
-        if (timer <= 0)
-        {
-            // Switch to the next state
-            stateMachine.SwitchState(new PlayerTestState(stateMachine));
-        }
+        Debug.Log(timer);
     }
 
     public override void Exit()
     {
-        Debug.Log("Exit");
+        stateMachine.InputReader.JumpEvent -= OnJump;
+    }
+
+    //
+    private void OnJump()
+    {
+        // Switch to the next state
+        stateMachine.SwitchState(new PlayerTestState(stateMachine));
     }
 }
