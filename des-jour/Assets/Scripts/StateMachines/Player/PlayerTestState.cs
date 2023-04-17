@@ -4,34 +4,29 @@ using UnityEngine;
 
 public class PlayerTestState : PlayerBaseState
 {
-    // Timer for the state
-    private float timer;
+
     // Constructor for the PlayerTestState class
     public PlayerTestState(PlayerStateMachine stateMachine) : base(stateMachine) { }
 
     public override void Enter()
     {
-        // If the jump button is pressed
-        stateMachine.InputReader.JumpEvent += OnJump;
+
     }
 
     public override void Tick(float deltaTime)
     {
-        // Decrement the timer
-        timer += deltaTime;
-
-        Debug.Log(timer);
+        // Create a new Vector3
+        Vector3 movement = new Vector3();
+        // Set the x, y, and z values of the Vector3 to the x, y, and z values of the InputReader's MovementValue
+        movement.x = stateMachine.InputReader.MovementValue.x;
+        movement.y = 0;
+        movement.z = stateMachine.InputReader.MovementValue.y;
+        // Translate the player by the movement Vector3
+        stateMachine.transform.Translate(movement * deltaTime);
     }
 
     public override void Exit()
     {
-        stateMachine.InputReader.JumpEvent -= OnJump;
-    }
 
-    //
-    private void OnJump()
-    {
-        // Switch to the next state
-        stateMachine.SwitchState(new PlayerTestState(stateMachine));
     }
 }
