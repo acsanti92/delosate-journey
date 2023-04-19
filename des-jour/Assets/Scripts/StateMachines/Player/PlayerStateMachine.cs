@@ -12,6 +12,8 @@ public class PlayerStateMachine : StateMachine
 
     [field: SerializeField] public float FreeLookMovementSpeed { get; private set; }
 
+    [field: SerializeField] public float RotationDamping { get; private set; }
+
     public Transform MainCameraTransform { get; private set; }
 
     // Start is called before the first frame update
@@ -19,6 +21,6 @@ public class PlayerStateMachine : StateMachine
     {
         MainCameraTransform = Camera.main.transform;
 
-        SwitchState(new PlayerTestState(this));
+        SwitchState(new PlayerFreeLookState(this));
     }
 }
