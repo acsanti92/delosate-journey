@@ -16,11 +16,8 @@ public class PlayerTestState : PlayerBaseState
     public override void Tick(float deltaTime)
     {
         // Create a new Vector3
-        Vector3 movement = new Vector3();
-        // Set the x, y, and z values of the Vector3 to the x, y, and z values of the InputReader's MovementValue
-        movement.x = stateMachine.InputReader.MovementValue.x;
-        movement.y = 0;
-        movement.z = stateMachine.InputReader.MovementValue.y;
+        Vector3 movement = CalculateMovement();
+
         // Move the CharacterController by the movement Vector3 multiplied by the deltaTime and the FreeLookMovementSpeed
         stateMachine.Controller.Move(movement * deltaTime * stateMachine.FreeLookMovementSpeed);
 
@@ -39,5 +36,22 @@ public class PlayerTestState : PlayerBaseState
     public override void Exit()
     {
 
+    }
+
+    private Vector3 CalculateMovement()
+    {
+        // Get the forward and right vectors of the MainCameraTransform
+        Vector3 forward = stateMachine.MainCameraTransform.forward;
+        Vector3 right = stateMachine.MainCameraTransform.right;
+
+        // Set the y values of the forward and right vectors to 0
+        forward.y = 0f;
+        right.y = 0f;
+
+        // Normalize the forward and right vectors
+        forward.Normalize();
+        right.Normalize();
+
+        return forward * stateMachine.InputReader.MovementValue.y + right * stateMachine.InputReader.MovementValue.x;
     }
 }
